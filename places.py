@@ -1,13 +1,19 @@
+from json import load
 from time import sleep
 from typing import List, NamedTuple, Tuple
 
 import requests
 import pandas as pd
 
-G_API_KEY = 
+
+G_API_KEY =  None
 REVERSE_GEOLOCATE_API = "https://maps.googleapis.com/maps/api/geocode/json?address={city},+{state}&key={api_key}"
 PLACE_API = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={lat},{lon}&radius={radius}&keyword={keyword}&key={api_key}"
 PLACE_NEXT_PAGE_TOKEN = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken={page_token}&key={api_key}"
+
+with open(".google_key") as f:
+    data = json.load(f)
+    G_API_KEY = data["api_key"]
 
 
 def fetch_city_coords(city: str, state: str) -> List[float]:
@@ -62,11 +68,3 @@ def find_place_count_by_keyword(keyword: str, lat: float, lon: float) -> List[Tu
     for lat, lon in _get_near_coords(lat, lon):
         result |= _perform_place_search(keyword, lat, lon)
     return list(result)
-
-if __name__ == "__main__":
-    from pprint import pprint   
-    
-    lat, lon = [40.44062479999999, -79.9958864]
-    r = find_place_count_by_keyword("burger", lat, lon)
-    pprint(r)
-    print(len(r))
