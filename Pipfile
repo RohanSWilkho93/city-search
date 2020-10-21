@@ -14,6 +14,7 @@ requests = "*"
 matplotlib = "*"
 plotly = "*"
 ipywidgets = ">=7.5"
+dash = "*"
 
 [requires]
 python_version = "3.7"
